@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>NeuroArt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial; background: #0d0d1a; color: #d0d0d0; padding: 20px; text-align: center; }
+        h1 { color: #e94560; margin-bottom: 10px; }
+        input { width: 100%; padding: 12px; background: #1a1a35; border: 1px solid #2a2a4a; color: #fff; border-radius: 8px; font-size: 14px; margin: 10px 0; }
+        button { width: 100%; padding: 14px; background: #e94560; color: #fff; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+        button:active { background: #c0392b; }
+        img { max-width: 100%; border-radius: 10px; margin-top: 10px; }
+        .loader { margin: 10px; color: #888; }
+    </style>
+</head>
+<body>
+    <h1>🎨 NeuroArt</h1>
+    <p>Опишите картинку — нейросеть создаст</p>
+    <input id="prompt" placeholder="Кот в космосе, 4K..." />
+    <button onclick="generate()">Сгенерировать</button>
+    <div id="result"></div>
+    <script>
+        async function generate() {
+            const prompt = document.getElementById('prompt').value;
+            if (!prompt) return alert('Введите описание!');
+            document.getElementById('result').innerHTML = '<div class="loader">Генерирую... 10-20 сек.</div>';
+            const res = await fetch('/api/generate', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({prompt: prompt}) });
+            const data = await res.json();
+            document.getElementById('result').innerHTML = data.image ? `<img src="data:image/png;base64,${data.image}" />` : '<div class="loader">Ошибка. Попробуйте снова.</div>';
+        }
+    </script>
+</body>
+</html>
