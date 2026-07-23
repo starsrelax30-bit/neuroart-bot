@@ -1,5 +1,0 @@
-aiogram
-flask
-aiohttp
-requests
-mistralai
